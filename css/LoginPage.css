@@ -1,0 +1,106 @@
+body {
+    font-family: "Lato", sans-serif;
+}
+form {border: 3px solid #f1f1f1;}
+
+
+.main-head{
+    height: 150px;
+    background: #FFF;
+}
+
+.sidenav {
+    height: 100%;
+    background-color: #282828;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+
+.main {
+    padding: 5px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+}
+
+@media screen and (max-width: 450px) {
+    .login-form{
+        margin-top: 10%;
+    }
+
+    .register-form{
+        margin-top: 10%;
+    }
+}
+
+@media screen and (min-width: 768px){
+    .main{
+        margin-left: 40%;
+    }
+
+    .sidenav{
+        width: 40%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+    }
+
+    .login-form{
+        margin-top: 50%;
+    }
+
+    .register-form{
+        margin-top: 20%;
+    }
+}
+
+
+.login-main-text{
+    margin-top: 20%;
+    padding: 60px;
+    color: #fff;
+}
+
+.login-main-text h2{
+    font-weight: 300;
+    text-align: center;
+}
+
+.login-description{
+    text-align: center;
+}
+
+.btn-login{
+    background-color: #4CAF50 !important;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+.btn-register{
+    border: none;
+    cursor: pointer;
+}
+
+.Remember-me{
+    margin-top: 5%;
+    font-size: small;
+}
+
+h2{
+    text-align: center;
+    padding-bottom: 10%;
+}
+button:hover {
+    opacity: 0.8;
+}
+
+span.psw {
+    float: right;
+    font-size: small;
+    /*padding-top: 16px;*/
+}
