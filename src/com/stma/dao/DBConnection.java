@@ -57,7 +57,7 @@ public class DBConnection {
 				//
 				// TODO create all table if they don't exist
 				String createQuery = "CREATE TABLE IF NOT EXISTS `users` (" + 
-						"  `userID` int(11) NOT NULL AUTO_INCREMENT," + 
+						" 0 `userID` int(11) NOT NULL AUTO_INCREMENT," + 
 						"  `username` varchar(50) NOT NULL," + 
 						"  `firstname` varchar(50) NOT NULL," + 
 						"  `lastname` varchar(50) NOT NULL," +  
