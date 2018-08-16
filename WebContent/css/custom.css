@@ -53,3 +53,8 @@
         position: initial;
     }
 }
+
+.column-in-center{
+    float: none;
+    margin: 0 auto;
+}
