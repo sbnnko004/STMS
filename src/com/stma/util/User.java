@@ -4,16 +4,14 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String emailAddress;
-	private int userID;
 	private String passWord;
 	private String userName;
 	
-	public User(String userName,String firstName,String lastName, String emailAddress, int userID, String passWord) {
+	public User(String userName,String firstName,String lastName, String emailAddress, String passWord) {
 		this.setUserName(userName);
 		this.firstName=firstName;
 		this.lastName=lastName;
 		this.emailAddress=emailAddress;
-		this.userID=userID;
 		this.passWord=passWord;
 	}
 	public User(String userName,String firstName,String lastName, String emailAddress) {
@@ -57,12 +55,6 @@ public class User {
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
-	}
-	/**
-	 * @return the pS_no
-	 */
-	public int getUserID() {
-		return userID;
 	}
 	/**
 	 * @return the passWord

@@ -24,14 +24,14 @@ public class AuthenticationFilter implements Filter{
 			throws IOException, ServletException {
 		//pre-processing
 		HttpServletRequest request = (HttpServletRequest)arg0;
-		if(request.getRequestURI().startsWith("/STMA/getDashboard")||
-				request.getRequestURI().startsWith("/STMA/getProfileDetails")){
+		System.out.println(request.getRequestURI());
+		//if(!request.getRequestURI().startsWith("/STMA/login/")||!request.getRequestURI().startsWith("/STMA/login")){
 			HttpSession session = request.getSession();
 			if(session.getAttribute("username")==null){
-				request.getRequestDispatcher("/html/login.jsp").forward(request, arg1);
+				//request.getRequestDispatcher("/html/login.jsp").forward(request, arg1);
 			}
 			
-		}
+		//}
 		
 		arg2.doFilter(request, arg1);
 		//post-processing

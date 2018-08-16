@@ -17,10 +17,10 @@ public class HomeServlet extends HttpServlet{
 	//lifecycle methods - init, service, destroy
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("in doGET method");
-		
+		//System.out.println("in doGET method");
+		System.out.println("opening "+"/html/login.jsp");
 		//forward the control to the index.html
-		req.getRequestDispatcher("/html/index.html").forward(req, resp);
+		req.getRequestDispatcher("/html/login.jsp").forward(req, resp);
 	}
 	
 	@Override
