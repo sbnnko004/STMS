@@ -1,10 +1,11 @@
 package com.stma.util;
 
-public class Assignments {
+public class Assignments extends Event {
 	
     private String courseCode;
 
-    public Assignments(String courseCode) {
+    public Assignments(String eventDescription, String eventName, String startDate, String endDate, String startTime, String endTime,String courseCode) {
+    	super(eventDescription, eventName, startDate, endDate, startTime, endTime); 
         this.courseCode = courseCode;
     }
 
