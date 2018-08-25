@@ -1,11 +1,10 @@
 package com.stma.util;
 
-public class Tests extends Event{
+public class Tests {
 	
     private String courseCode;
 
-    public Tests(String eventDescription, String eventName, String startDate, String endDate, String startTime, String endTime,String courseCode) {
-    	super(eventDescription, eventName, startDate, endDate, startTime, endTime); 
+    public Tests(String courseCode) {
         this.courseCode = courseCode;
     }
 
