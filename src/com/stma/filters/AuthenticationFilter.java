@@ -23,15 +23,20 @@ public class AuthenticationFilter implements Filter{
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
 		//pre-processing
+		
+		
+		
+		
 		HttpServletRequest request = (HttpServletRequest)arg0;
 		System.out.println(request.getRequestURI());
-		//if(!request.getRequestURI().startsWith("/STMA/login/")||!request.getRequestURI().startsWith("/STMA/login")){
+		/*System.out.println(request.getRequestURI()+" login");
+		if(!request.getRequestURI().startsWith("/STMA/login")){
 			HttpSession session = request.getSession();
 			if(session.getAttribute("username")==null){
-				//request.getRequestDispatcher("/html/login.jsp").forward(request, arg1);
+				request.getRequestDispatcher("/html/login.jsp").forward(request, arg1);
 			}
 			
-		//}
+		}*/
 		
 		arg2.doFilter(request, arg1);
 		//post-processing

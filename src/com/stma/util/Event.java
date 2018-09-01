@@ -49,4 +49,7 @@ public class Event {
         return endTime;
     }
 
+    public String toString() {
+    	return eventName+" /n"+eventDescription+" /n"+startDate;
+    }
 }

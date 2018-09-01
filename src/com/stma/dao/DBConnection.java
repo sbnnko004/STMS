@@ -21,6 +21,7 @@ public class DBConnection {
 	protected static final String table_events = "events";
 	protected static final String table_tests = "tests";
 	protected static final String table_projects = "projects";
+	protected static final String table_assignments = "assignments";
 	//protected static final String table_toDoList = "toDoList";
 	
 	public static Connection getConnectionToDatabase() {
@@ -50,14 +51,13 @@ public class DBConnection {
 
 		if (connection != null) {
 			System.out.println("Connection made to DB! v");
-			// create tables if they don't already exist
-			System.out.println("creating tables if they don't exits!");
 			try {
 				// "  `phonenumber` varchar(50)," +
 				//
 				// TODO create all table if they don't exist
-				String createQuery = "CREATE TABLE IF NOT EXISTS `users` (" + 
-						" 0 `userID` int(7) NOT NULL AUTO_INCREMENT," + 
+				System.out.println("Creates the Users table, if it doesn't exists");
+				String createQuery = "CREATE TABLE IF NOT EXISTS `"+table_users+"` (" + 
+						"  `userID` int(11) NOT NULL AUTO_INCREMENT," + 
 						"  `username` varchar(50) NOT NULL," + 
 						"  `firstname` varchar(50) NOT NULL," + 
 						"  `lastname` varchar(50) NOT NULL," +  
@@ -68,51 +68,58 @@ public class DBConnection {
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				PreparedStatement statement = connection.prepareStatement(createQuery);
 				statement.executeUpdate();
-
-
-				//Creates the Test table, if it doesn't exists.
-				String createTestQuery = "CREATE TABLE IF NOT EXISTS `Tests` (" + 
-						" 0 `userID` int(7) NOT NULL AUTO_INCREMENT," + 
+				
+				System.out.println("Creates the Events table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_events+"` (" + 
+						"  `eventID` int(11) NOT NULL AUTO_INCREMENT," +
+						"  `userID` int(11) NOT NULL," +
+						"  `EventDescription` varchar(256) NOT NULL," + 
+						"  `EventName` varchar(50) NOT NULL," + 
+						"  `StartDate` Date NOT NULL," + 
+						"  `EndDate` Date NOT NULL," +  
+						"  `StartTime` Time NOT NULL," + 
+						"  `EndTime` Time NOT NULL," +
+						"  PRIMARY KEY (`eventID`)," +
+						"  FOREIGN KEY (`userID`) REFERENCES `"+table_users+"`(`userID`)" +
+						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+				
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
+				
+				
+				System.out.println("Creates the Test table, if it doesn't exists");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_tests+"` (" + 
+						"  `eventID` int(11) NOT NULL," + 
 						"  `CourseCode` varchar(8) NOT NULL," + 
-						"  `StartDate` Date NOT NULL," + 
-						"  `EndDate` Date NOT NULL," +  
-						"  `StateTime` Time NOT NULL," + 
-						"  `EndTime` Time NOT NULL," + 
-						"  PRIMARY KEY (`userID`)," + 
-						"  UNIQUE (`emailaddress`)"+
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" +
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
-				PreparedStatement statementTest = connection.prepareStatement(createTestQuery);
-				statementTest.executeUpdate();
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
 				
-				//Creates the Test table, if it doesn't exists.
-				String createProjectQuery = "CREATE TABLE IF NOT EXISTS `Projects` (" + 
-						" 0 `userID` int(7) NOT NULL AUTO_INCREMENT," + 
+				
+				System.out.println("Creates the Projects table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_projects+"` (" + 
+						"  `eventID` int(11) NOT NULL," + 
 						"  `CourseCode` varchar(8) NOT NULL," + 
-						"  `StartDate` Date NOT NULL," + 
-						"  `EndDate` Date NOT NULL," +  
-						"  `StateTime` Time NOT NULL," + 
-						"  `EndTime` Time NOT NULL," + 
-						"  PRIMARY KEY (`userID`)," + 
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" + 
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
-				PreparedStatement statementProject = connection.prepareStatement(createProjectQuery);
-				statementProject.executeUpdate();
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
 				
-				//Creates the Events table, if it doesn't exists.
-				String createEventQuery = "CREATE TABLE IF NOT EXISTS `Events` (" + 
-						" 0 `userID` int(7) NOT NULL AUTO_INCREMENT," + 
-						"  `EventDescription` varchar(50) NOT NULL," + 
-						"  `StartDate` Date NOT NULL," + 
-						"  `EndDate` Date NOT NULL," +  
-						"  `StateTime` Time NOT NULL," + 
-						"  `EndTime` Time NOT NULL," + 
-						"  PRIMARY KEY (`userID`)," + 
+				System.out.println("Creates the Assignments table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_assignments+"` (" + 
+						"  `eventID` int(11) NOT NULL," + 
+						"  `CourseCode` varchar(8) NOT NULL," + 
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" +
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
-				PreparedStatement statementEvent = connection.prepareStatement(createEventQuery);
-				statementEvent.executeUpdate();
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
 				
+				
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
