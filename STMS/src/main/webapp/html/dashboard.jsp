@@ -308,7 +308,7 @@
                                                             </div>
                                                         </td>
 
-                                                            <td> ${items} </td>
+                                                            <td>  ${items} </td>
                                                         <td class="td-actions text-right">
                                                             <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
                                                                 <i class="pe-7s-pen"></i>
