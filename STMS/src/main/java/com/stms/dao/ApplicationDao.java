@@ -115,6 +115,7 @@ public class ApplicationDao {
 
 		try {
 			int userID=0;
+			String date;
 			// get the connection for the database
 			Connection connection = DBConnection.getConnectionToDatabase();
 			String sql = "SELECT userID FROM users where username = '"+username+"'";
@@ -146,6 +147,7 @@ public class ApplicationDao {
 			while(set.next()) {
 				justAdded = set.getInt("justAdded");
 			}
+
 			if(event instanceof Assignment) {
 				Assignment assignment = (Assignment) event;
 				insertQuery = "INSERT INTO `assignments` (`eventID`,  `courseCode`) VALUES (?, ?);";
