@@ -8,12 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.stms.util.Assignment;
+import com.stms.util.*;
 //import com.stma.beans.Order;
-import com.stms.util.Event;
-import com.stms.util.Project;
-import com.stms.util.Test;
-import com.stms.util.User;
+
 
 public class ApplicationDao {
 
@@ -40,6 +37,8 @@ public class ApplicationDao {
 			
 			while (set.next()) {
 				Event event = null;
+				Priority priority = null;
+
 				int eventID= set.getInt("eventID");
 				String EventDescription = set.getString("EventDescription");
 				String EventName = set.getString("EventName");
@@ -59,6 +58,8 @@ public class ApplicationDao {
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
 								event = new Assignment(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, myset.getString("courseCode"));
+								priority = new Priority();
+								System.out.println("Assignment status: " + priority.getPriority(event));
 								System.out.println("assignment");
 							}
 						}
@@ -76,6 +77,8 @@ public class ApplicationDao {
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
 								event = new Project(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, myset.getString("courseCode"));
+								priority = new Priority();
+								System.out.println("Project Status: " +priority.getPriority(event));
 								System.out.println("projects");
 							}
 						}
@@ -92,6 +95,8 @@ public class ApplicationDao {
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
 								event = new Test(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, myset.getString("courseCode"));
+								priority = new Priority();
+								System.out.println("Test Status: " +priority.getPriority(event));
 								System.out.println("tests");
 							}
 						}
@@ -100,6 +105,8 @@ public class ApplicationDao {
 				}
 				if(event==null) {
 					event = new Event(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime);
+					priority = new Priority();
+					System.out.println("Event Status: " +priority.getPriority(event));
 					System.out.println("event");
 				}
 				events.add(event);
@@ -197,19 +204,25 @@ public class ApplicationDao {
 		int userID = 0;
 		int eventID;
 
+		//Get connection to the database.
 		Connection connection = DBConnection.getConnectionToDatabase();
 		String sql = "SELECT userID FROM users where username = '"+username+"'";
+
+		// Prepare and execute query statement sql statement.
 		Statement mystatement = connection.prepareStatement(sql);
 		ResultSet userSet = mystatement.executeQuery(sql);
+
+		//Get particular user ID.
 		while(userSet.next()) {
 			userID = userSet.getInt("userID");
 		}
 
-
+		//Get eventIDs per particular user.
 		String eventSql = "SELECT eventID FROM "+DBConnection.table_events+" WHERE userID='"+ userID +"'";
 		Statement statement = connection.createStatement();
 		ResultSet set = statement.executeQuery(eventSql);
 
+		//Get events and store events in Resultset.
 		while(set.next()){
 			eventID = set.getInt("eventID");
 

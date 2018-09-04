@@ -308,22 +308,12 @@
                                                             </div>
                                                         </td>
 
-                                                            <td>  ${items} </td>
+                                                        <td> <b> ${items}</b> </td>
                                                         <td class="td-actions text-right">
                                                             <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
                                                                 <i class="pe-7s-pen"></i>
                                                             </button>
-                                                            <button type="button" rel=Updates were rejected because the remote contains work that you do
-hint: not have locally. This is usually caused by another repository pushing
-hint: to the same ref. You may want to first integrate the remote changes
-hint: (e.g., 'git pull ...') before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-"tooltip" title=Updates were rejected because the remote contains work that you do
-hint: not have locally. This is usually caused by another repository pushing
-hint: to the same ref. You may want to first integrate the remote changes
-hint: (e.g., 'git pull ...') before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-"Remove" class="btn btn-danger btn-simple btn-xs">
+                                                            <button type="button" rel="Remove" class="btn btn-danger btn-simple btn-xs">
                                                                 <i class="pe-7s-close"></i>
                                                             </button>
                                                         </td>

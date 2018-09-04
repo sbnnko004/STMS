@@ -2149,6 +2149,7 @@ fieldset[disabled] .btn-neutral.active {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(63, 63, 68, 0.1);
     background-color: #FFFFFF;
     margin-bottom: 30px;
+
 }
 
 .card .image {
@@ -3794,8 +3795,6 @@ fieldset[disabled] .btn-neutral.active {
         margin-left: -5px;
         margin-right: -5px;
         text-transform: capitalize;
-        border-top: #761c19;
-        border-bottom-color: #761c19;
     }
     .table-responsive {
         overflow: visible;
