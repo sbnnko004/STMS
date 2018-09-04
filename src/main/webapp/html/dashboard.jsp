@@ -85,9 +85,20 @@
             	'timeFormat': 'H:i', 
             	'step': 5 
             	});
+      		var appended = $('<div />').html("<label for=\"which-course\">Enter course code e.g. CSC3003S</label>\n<input type=\"text\" name=\"coursecode\" id=\"coursecode\" tabindex=\"3\" class=\"form-control\" placeholder=\"Leave blank if other\" value=\"\">");
+      		appended.id = 'appended';
+      		$('input:radio[name="course"]').change(
+      		    function(){
+      		        if ($(this).val() == 'test'||$(this).val() == 'assignment'||$(this).val() == 'project') {
+      		            $(appended).appendTo('#here');
+      		        }
+      		        else {
+      		            $(appended).remove();
+      		        }
+      		    });
+
 
         });
-
         $(document).ready(function() {
 
             $('#calendar').fullCalendar({
@@ -117,8 +128,7 @@
 					%>backgroundColor: '#ff0000'
 				<%
 					}else if(events.get(i) instanceof Project){
-							%>backgroundColor: '#ffd700'
-				<%
+							%>backgroundColor: '#ffd700'<%
 					}
 					%>
 				}
@@ -343,7 +353,7 @@
 	                                                        <div class="form-group">
 	                                                            <input type="text" name="eventdescription" id="eventdescription" tabindex="2" class="form-control" placeholder="Event Description" value="">
 	                                                        </div>
-														    <div class="form-group">														      
+														    <!--div class="form-group">														      
 														      <div class="col-lg-12">
 														      	<label for="which-course">Select event type: </label>
 														      	<select  name="type" form="login-form">
@@ -352,12 +362,25 @@
 																  <option value="assignment">Assignment</option>
 																  <option value="protest">Project</option>
 																</select>
-														      </div>
-														    
-														      <div class="reveal-if-active">
-														        <label for="which-course">Enter course code e.g. CSC3003S</label>
-														        <input type="text" name="coursecode" id="coursecode" tabindex="3" class="form-control" placeholder="Leave blank if other" value="">
-														      </div>
+														      </div-->
+													      	<div class="form-group">
+														    	<div>
+														    		<input type="radio" id="eventChoice1"
+														        	   name="type" value="test">
+															    	<label for="eventChoice1">Test</label>
+															    	<input type="radio" id="eventChoice2"
+														        	   name="type" value="assignment">
+															    	<label for="eventChoice2">Assignment</label>
+															    	<input type="radio" id="eventChoice3"
+														        	   name="type" value="project">
+															    	<label for="eventChoice3">Project</label>
+															    	<input type="radio" id="eventChoice4"
+														        	   name="type" value="other">
+															    	<label for="eventChoice4">Other</label>
+															  	</div>
+														      	<div id="#here">
+														      	</div>
+
 														    </div>
 														    
 	                                                        <div class="form-group">
@@ -410,7 +433,7 @@
                         </div>
                     </div>
                 </div>
-                <footer style="position: fixed;    bottom: 0;  width: 100%;" class="footer">
+                <footer  class="footer">
                     <div class="container-fluid">
                         <nav class="pull-left">
                             <ul>
@@ -435,8 +458,6 @@
                 </footer>
             </div>
         </div>
-        	<div class="clear"></div>
-        	<div class="clear"></div>
         
      </div>
 </body>

@@ -150,7 +150,7 @@
 				
             
         </div>
-        <footer style= "position: fixed; height: 100px;    bottom: 0;  width: 100%;" class="footer">
+        <footer class="footer">
                 <div class="container">
                     <nav class="pull-left">
                         <ul>

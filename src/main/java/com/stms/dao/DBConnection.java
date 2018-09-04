@@ -11,7 +11,7 @@ public class DBConnection {
 	protected static final String hostURL = "nightmare.cs.uct.ac.za:3306/";
 	protected static final String table_users = "users";
 	//protected static final String table_student = "student";
-	//protected static final String table_admin = "admin";
+	protected static final String table_courses = "course";
 	protected static final String table_events = "events";
 	protected static final String table_tests = "tests";
 	protected static final String table_projects = "projects";
@@ -80,12 +80,24 @@ public class DBConnection {
 				statement = connection.prepareStatement(createQuery);
 				statement.executeUpdate();
 				
+				System.out.println("Creates the Courses table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_courses+"` (" + 
+						" `courseID` int(11) NOT NULL AUTO_INCREMENT,"+
+						" `CourseCode` varchar(8) NOT NULL,"+
+						" PRIMARY KEY (`courseID`)"+
+						") ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+						;
+				
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
 				
 				System.out.println("Creates the Test table, if it doesn't exists");
 				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_tests+"` (" + 
 						"  `eventID` int(11) NOT NULL," + 
-						"  `CourseCode` varchar(8) NOT NULL," + 
-						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" +
+						"  `courseID` int(11) NOT NULL," + 
+						"  `minutesNeeded` int(4) NULL,"+
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)," +
+						"  FOREIGN KEY (`courseID`) REFERENCES `"+table_courses+"`(`courseID`)"+
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
 				statement = connection.prepareStatement(createQuery);
@@ -95,8 +107,10 @@ public class DBConnection {
 				System.out.println("Creates the Projects table, if it doesn't exists.");
 				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_projects+"` (" + 
 						"  `eventID` int(11) NOT NULL," + 
-						"  `CourseCode` varchar(8) NOT NULL," + 
-						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" + 
+						"  `courseID` int(11) NOT NULL," + 
+						"  `minutesNeeded` int(4) NULL,"+
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)," +
+						"  FOREIGN KEY (`courseID`) REFERENCES `"+table_courses+"`(`courseID`)"+
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
 				statement = connection.prepareStatement(createQuery);
@@ -105,8 +119,9 @@ public class DBConnection {
 				System.out.println("Creates the Assignments table, if it doesn't exists.");
 				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_assignments+"` (" + 
 						"  `eventID` int(11) NOT NULL," + 
-						"  `CourseCode` varchar(8) NOT NULL," + 
-						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)" +
+						"  `courseID` int(11) NOT NULL," + 
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)," +
+						"  FOREIGN KEY (`courseID`) REFERENCES `"+table_courses+"`(`courseID`)"+
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
 				statement = connection.prepareStatement(createQuery);
