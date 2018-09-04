@@ -49,12 +49,12 @@ public class ApplicationDao {
 				String EndTime = set.getString("EndTime");
 				
 				{
-					sql = "SELECT COUNT(*) AS num FROM assignments WHERE eventID="+eventID;
+					sql = "SELECT COUNT(*) AS num FROM assignments WHERE eventID='"+eventID+"'";
 					Statement mystatement = connection.prepareStatement(sql);
 					ResultSet myset = mystatement.executeQuery(sql);
 					if(myset.next()) {
 						if(myset.getInt("num")==1) {
-							sql = "SELECT * FROM assignments WHERE eventID="+eventID;
+							sql = "SELECT * FROM assignments WHERE eventID='"+eventID+"'";
 							mystatement = connection.prepareStatement(sql);
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
@@ -65,32 +65,48 @@ public class ApplicationDao {
 					}
 				}
 				if(event==null) {
-					sql = "SELECT COUNT(*) AS num FROM projects WHERE eventID="+eventID;
+					sql = "SELECT COUNT(*) AS num FROM "+DBConnection.table_projects+" WHERE eventID='"+eventID+"'";
 					Statement mystatement = connection.prepareStatement(sql);
 					ResultSet myset = mystatement.executeQuery(sql);
 					if(myset.next()) {
 						if(myset.getInt("num")==1) {
-							sql = "SELECT * FROM projects WHERE eventID="+eventID;
+							sql = "SELECT * FROM "+DBConnection.table_projects+" WHERE eventID="+eventID;
 							mystatement = connection.prepareStatement(sql);
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
-								event = new Project(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, myset.getString("courseCode"));
-								System.out.println("projects");
+								int timeneeded =myset.getInt("minutesNeeded"); int timeremaining=myset.getInt("minutesRemaining");
+								sql = "SELECT courseCode FROM "+DBConnection.table_courses+" WHERE courseID='"+myset.getInt("courseID")+"'";
+								String courseCode ="";
+								mystatement = connection.prepareStatement(sql);
+								myset = mystatement.executeQuery(sql);
+								if(myset.next()) {
+									courseCode=myset.getString("courseCode");
+								}
+								event = new Project(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, courseCode, timeneeded, timeremaining);
+								System.out.println("project");
 							}
 						}
 					}
 				}
 				if(event==null) {
-					sql = "SELECT COUNT(*) AS num FROM tests WHERE eventID="+eventID;
+					sql = "SELECT COUNT(*) AS num FROM "+DBConnection.table_tests+" WHERE eventID='"+eventID+"'";
 					Statement mystatement = connection.prepareStatement(sql);
 					ResultSet myset = mystatement.executeQuery(sql);
 					if(myset.next()) {
 						if(myset.getInt("num")==1) {
-							sql = "SELECT * FROM tests WHERE eventID="+eventID;
+							sql = "SELECT * FROM "+DBConnection.table_tests+" WHERE eventID="+eventID;
 							mystatement = connection.prepareStatement(sql);
 							myset = mystatement.executeQuery(sql);
 							if(myset.next()) {
-								event = new Test(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, myset.getString("courseCode"));
+								int timeneeded =myset.getInt("minutesNeeded"); int timeremaining=myset.getInt("minutesRemaining");
+								sql = "SELECT courseCode FROM "+DBConnection.table_courses+" WHERE courseID='"+myset.getInt("courseID")+"'";
+								String courseCode ="";
+								mystatement = connection.prepareStatement(sql);
+								myset = mystatement.executeQuery(sql);
+								if(myset.next()) {
+									courseCode=myset.getString("courseCode");
+								}
+								event = new Test(eventID,EventName,EventDescription,StartDate,EndDate,StartTime,EndTime, courseCode, timeneeded, timeremaining);
 								System.out.println("tests");
 							}
 						}
@@ -126,52 +142,131 @@ public class ApplicationDao {
 			String insertQuery = "INSERT INTO `events` (`eventID`, `userID`, `EventDescription`, `EventName`, `StartDate`, `EndDate`, `StartTime`, `EndTime`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);";
 
 			// set parameters with PreparedStatement
-			java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
-			statement.setInt(1, userID);
-			statement.setString(2, event.getEventDescription());
-			statement.setString(3, event.getEventName());
-			statement.setString(4, event.getStartDate());
-			statement.setString(5, event.getEndDate());
-			statement.setString(6, event.getStartTime());
-			statement.setString(7, event.getEndTime());
+			{
+				java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+				statement.setInt(1, userID);
+				statement.setString(2, event.getEventDescription());
+				statement.setString(3, event.getEventName());
+				statement.setString(4, event.getStartDate());
+				statement.setString(5, event.getEndDate());
+				statement.setString(6, event.getStartTime());
+				statement.setString(7, event.getEndTime());
+				
+				// execute the statement
+				rowsAffected = statement.executeUpdate();
+				
+			}
 			
-			// execute the statement
-			rowsAffected = statement.executeUpdate();
-			sql = "SELECT max(eventID) as justAdded FROM events  where userID="+userID;
+			sql = "SELECT max(eventID) as justAdded FROM events  where userID='"+userID+"'";
 			mystatement = connection.prepareStatement(sql);
 			set = mystatement.executeQuery(sql);
 			int justAdded = 0;
 			while(set.next()) {
 				justAdded = set.getInt("justAdded");
 			}
+			int courseID = -1;
+				
 			if(event instanceof Assignment) {
 				Assignment assignment = (Assignment) event;
-				insertQuery = "INSERT INTO `assignments` (`eventID`,  `courseCode`) VALUES (?, ?);";
+				
+				sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+assignment.getCourseCode()+"'";
+				mystatement = connection.prepareStatement(sql);
+				set = mystatement.executeQuery(sql);
+				while(set.next()) {
+					courseID = set.getInt("courseID");
+				}
+				if(courseID==-1) {
+					insertQuery = "INSERT INTO `"+DBConnection.table_courses+"` (`courseID`,  `courseCode`) VALUES (NULL, ?);";
+
+					// set parameters with PreparedStatement
+					java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+					statement.setString(1, assignment.getCourseCode());
+					rowsAffected += statement.executeUpdate();
+					
+					sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+assignment.getCourseCode()+"'";
+					mystatement = connection.prepareStatement(sql);
+					set = mystatement.executeQuery(sql);
+					while(set.next()) {
+						courseID = set.getInt("courseID");
+					}
+				}
+				insertQuery = "INSERT INTO `"+DBConnection.table_assignments+"` (`eventID`,  `courseID`) VALUES (?, ?);";
 
 				// set parameters with PreparedStatement
-				statement = connection.prepareStatement(insertQuery);
+				java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
 				statement.setInt(1, justAdded);
-				statement.setString(2, assignment.getCourseCode());
+				statement.setInt(2, courseID);
 				rowsAffected += statement.executeUpdate();
 			}
-			if(event instanceof Project) {
+			else if(event instanceof Project) {
 				Project project = (Project) event;
-				insertQuery = "INSERT INTO `projects` (`eventID`,  `courseCode`) VALUES (?, ?);";
+				
+				sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+project.getCourseCode()+"'";
+				mystatement = connection.prepareStatement(sql);
+				set = mystatement.executeQuery(sql);
+				while(set.next()) {
+					courseID = set.getInt("courseID");
+				}
+				if(courseID==-1) {
+					insertQuery = "INSERT INTO `"+DBConnection.table_courses+"` (`courseID`,  `courseCode`) VALUES (NULL, ?);";
+
+					// set parameters with PreparedStatement
+					java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+					statement.setString(1, project.getCourseCode());
+					rowsAffected += statement.executeUpdate();
+					
+					sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+project.getCourseCode()+"'";
+					mystatement = connection.prepareStatement(sql);
+					set = mystatement.executeQuery(sql);
+					while(set.next()) {
+						courseID = set.getInt("courseID");
+					}
+				}
+				insertQuery = "INSERT INTO `"+DBConnection.table_projects+"` (`eventID`,  `courseID`, `minutesNeeded`, `minutesRemaining`) VALUES (?, ?, ?, ?);";
 
 				// set parameters with PreparedStatement
-				statement = connection.prepareStatement(insertQuery);
+				java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
 				statement.setInt(1, justAdded);
-				statement.setString(2, project.getCourseCode());
+				statement.setInt(2, courseID);
+				statement.setInt(3, project.getTimeNeededInMinutes());
+				statement.setInt(4, project.getTimeRemaining());
 				rowsAffected += statement.executeUpdate();
+
 			}
 			else if(event instanceof Test) {
 				Test test = (Test) event;
-				insertQuery = "INSERT INTO `tests` (`eventID`,  `courseCode`) VALUES (?, ?);";
+				
+				sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+test.getCourseCode()+"'";
+				mystatement = connection.prepareStatement(sql);
+				set = mystatement.executeQuery(sql);
+				while(set.next()) {
+					courseID = set.getInt("courseID");
+				}
+				if(courseID==-1) {
+					insertQuery = "INSERT INTO `"+DBConnection.table_courses+"` (`courseID`,  `courseCode`) VALUES (NULL, ?);";
+
+					// set parameters with PreparedStatement
+					java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+					statement.setString(1, test.getCourseCode());
+					rowsAffected += statement.executeUpdate();
+					
+					sql = "SELECT courseID FROM "+DBConnection.table_courses+"  where courseCode='"+test.getCourseCode()+"'";
+					mystatement = connection.prepareStatement(sql);
+					set = mystatement.executeQuery(sql);
+					while(set.next()) {
+						courseID = set.getInt("courseID");
+					}
+				}
+				insertQuery = "INSERT INTO `"+DBConnection.table_tests+"` (`eventID`,  `courseID`, `minutesNeeded`, `minutesRemaining`) VALUES (?, ?, ?, ?);";
+
 				// set parameters with PreparedStatement
-				statement = connection.prepareStatement(insertQuery);
+				java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
 				statement.setInt(1, justAdded);
-				statement.setString(2, test.getCourseCode());
+				statement.setInt(2, courseID);
+				statement.setInt(3, test.getTimeNeededInMinutes());
+				statement.setInt(4, test.getTimeRemaining());
 				rowsAffected += statement.executeUpdate();
+
 			}
 			//System.out.println(userID);
 		} catch (SQLException exception) {
@@ -247,7 +342,7 @@ public class ApplicationDao {
 		
 		return exists;
 	}
-	public boolean validateUser(String username, String password) {
+	public boolean validateUser(String usernameOrEmail, String password) {
 		boolean isValidUser = false;
 		try {
 
@@ -256,13 +351,14 @@ public class ApplicationDao {
 
 			// write the select query
 			
-			String sql = "select * from users where username=? and password=aes_encrypt(?,?)";
+			String sql = "SELECT * FROM users WHERE (username=? OR emailaddress=?) AND password=aes_encrypt(?,?)";
 
 			// set parameters with PreparedStatement
 			java.sql.PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, username);
-			statement.setString(2, password);
-			statement.setString(3, "aikebiev");
+			statement.setString(1, usernameOrEmail);
+			statement.setString(2, usernameOrEmail);
+			statement.setString(3, password);
+			statement.setString(4, "aikebiev");
 
 			// execute the statement and check whether user exists
 

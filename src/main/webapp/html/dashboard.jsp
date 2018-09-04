@@ -353,7 +353,7 @@
 	                                                        <div class="form-group">
 	                                                            <input type="text" name="eventdescription" id="eventdescription" tabindex="2" class="form-control" placeholder="Event Description" value="">
 	                                                        </div>
-														    <!--div class="form-group">														      
+														    <div class="form-group">														      
 														      <div class="col-lg-12">
 														      	<label for="which-course">Select event type: </label>
 														      	<select  name="type" form="login-form">
@@ -362,8 +362,17 @@
 																  <option value="assignment">Assignment</option>
 																  <option value="protest">Project</option>
 																</select>
-														      </div-->
-													      	<div class="form-group">
+														      </div>
+   														      <div class="reveal-if-active">
+														        <label for="which-course">Enter course code e.g. CSC3003S</label>
+														        <input type="text" name="coursecode" id="coursecode" tabindex="3" class="form-control" placeholder="Leave blank if other" value="">
+														      </div>
+     														  <div class="reveal-if-active">
+														        <label for="which-course">Time required in Hours and Minutes: format HH-MM <br/>(This will be a drop down selector and will only show when Projects and Tests are shown)</label>
+														        <input type="text" name="timeneeded" id="timeneeded" tabindex="3" class="form-control" placeholder="Leave blank if other" value="10-00">
+														      </div>
+													      </div>
+													      	<!--div class="form-group">
 														    	<div>
 														    		<input type="radio" id="eventChoice1"
 														        	   name="type" value="test">
@@ -381,7 +390,7 @@
 														      	<div id="#here">
 														      	</div>
 
-														    </div>
+														    </div-->
 														    
 	                                                        <div class="form-group">
 	                                                            <input type="text" name="startdate" id="startdate" tabindex="3" class="form-control" placeholder="Start Date: YYYY-MM-DD" value="">

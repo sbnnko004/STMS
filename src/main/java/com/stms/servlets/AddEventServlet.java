@@ -34,18 +34,24 @@ public class AddEventServlet extends HttpServlet {
 		String endtime = req.getParameter("endtime");
 		String coursecode = req.getParameter("coursecode");
 		String type = req.getParameter("type");
+		String timeNeeded = req.getParameter("timeneeded");
 		
 		// fill it up in a User bean
 		Event event = new Event(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00");
 		
 		// call DAO layer and save the user object to DB
 		ApplicationDao dao = new ApplicationDao();
+		int timeNeededInMinutes = -1;
+		if(type.equals("test")||type.equals("project")) {
+			timeNeededInMinutes = 60 * Integer.parseInt(timeNeeded.split("-")[0])+Integer.parseInt(timeNeeded.split("-")[1]);
+		}
+			
 		if(type.equals("test"))
-			event = new Test(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00",coursecode);
+			event = new Test(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00",coursecode,timeNeededInMinutes);
 		else if(type.equals("assignment"))
 			event = new Assignment(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00",coursecode);
 		else if(type.equals("project"))
-			event = new Project(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00",coursecode);
+			event = new Project(eventname,eventdescription,startdate,enddate,starttime+":00",endtime+":00",coursecode,timeNeededInMinutes);
 		int rows = dao.addEvent(event, req.getSession().getAttribute("username").toString());
 
 		// prepare an information message for user about the success or failure of the operation
