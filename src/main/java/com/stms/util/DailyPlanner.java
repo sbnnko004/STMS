@@ -24,6 +24,7 @@ public class DailyPlanner{
 			events.remove(e);
 		}
 		
+		@Override
 		public String toString(){
 			return events.toString();
 		}

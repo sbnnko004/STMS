@@ -11,22 +11,23 @@ public class Task{
 		this.taskDuration = taskDuration;
 	}
 	
-	public void setTaskName(String name){
-		this.taskName = name;
-	}
-	
-	public void setTaskDuration(int duration){
-		this.taskDuration = duration;
+	public int getTaskDuration(){
+		return taskDuration;
 	}
 	
 	public String getTaskName(){
 		return taskName;
 	}
 	
-	public int getTaskDuration(){
-		return taskDuration;
+	public void setTaskDuration(int duration){
+		this.taskDuration = duration;
 	}
 	
+	public void setTaskName(String name){
+		this.taskName = name;
+	}
+	
+	@Override
 	public String toString(){
 		return taskName + " " + taskDuration;
 	}

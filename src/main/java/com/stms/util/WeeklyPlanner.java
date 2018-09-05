@@ -23,6 +23,7 @@ public class WeeklyPlanner{
 			dailyEvents.remove(dp);
 		}
 		
+		@Override
 		public String toString(){
 			return dailyEvents.toString();
 		}

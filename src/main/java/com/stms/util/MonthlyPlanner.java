@@ -23,6 +23,7 @@ public class MonthlyPlanner{
 			weeklyEvents.remove(wp);
 		}
 		
+		@Override
 		public String toString(){
 			return weeklyEvents.toString();
 		}

@@ -17,15 +17,7 @@ public class Event {
     protected String startTime;
     protected String endTime;
 
-    public Event(String eventDescription, String eventName, String startDate, String endDate, String startTime, String endTime) {
-        this.eventDescription = eventDescription;
-        this.eventName = eventName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-    public Event(int eventID, String eventDescription, String eventName, String startDate, String endDate, String startTime, String endTime) {
+    public Event(int eventID, String eventName, String eventDescription, String startDate, String endDate, String startTime, String endTime) {
         this.eventDescription = eventDescription;
         this.eventName = eventName;
         this.startDate = startDate;
@@ -34,28 +26,37 @@ public class Event {
         this.endTime = endTime;
         this.eventID = eventID;
     }
-    public int getEventID() {
-		return this.eventID;
-	}
+    public Event(String eventName, String eventDescription, String startDate, String endDate, String startTime, String endTime) {
+        this.eventDescription = eventDescription;
+        this.eventName = eventName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+    public String getEndDate() {
+        return endDate;
+    }
+    public String getEndTime() {
+        return endTime;
+    }
     public String getEventDescription() {
         return eventDescription;
     }
+    public int getEventID() {
+		return this.eventID;
+	}
     public String getEventName() {
         return eventName;
     }
     public String getStartDate() {
         return startDate;
     }
-    public String getEndDate() {
-        return endDate;
-    }
     public String getStartTime() {
         return startTime;
     }
-    public String getEndTime() {
-        return endTime;
-    }
-    public String toString() {
+    @Override
+	public String toString() {
     	return getEventName();
     }
 }

@@ -14,7 +14,33 @@ public class Priority {
         LOW
     }
 
+    /**
+     * Obtains the priority of an event
+     * @param event
+     * @return event Priority.
+     */
+    public static EventStatus getPriority(Event event){
+    	Priority priority = new Priority();
+        String eventEndDate = event.getEndDate();
+
+        long daysBetween = priority.getTotalDaysBetween(eventEndDate);
+
+        if(daysBetween > 14){
+            priority.eventStatus = EventStatus.LOW;
+        }
+        else if (daysBetween <= 14 && daysBetween > 7){
+        	priority.eventStatus = EventStatus.MEDIUM;
+        }
+        else if (daysBetween <= 7 && daysBetween > 4){
+        	priority.eventStatus = EventStatus.HIGH;
+        }
+        else
+        	priority.eventStatus = EventStatus.CRITICAL;
+
+        return priority.eventStatus;
+    }
     private EventStatus eventStatus;
+
     /**
      * Obtains current date.
      *
@@ -42,32 +68,6 @@ public class Priority {
 
 
         return ChronoUnit.DAYS.between(todayDate, endDate);
-    }
-
-    /**
-     * Obtains the priority of an event
-     * @param event
-     * @return event Priority.
-     */
-    public static EventStatus getPriority(Event event){
-    	Priority priority = new Priority();
-        String eventEndDate = event.getEndDate();
-
-        long daysBetween = priority.getTotalDaysBetween(eventEndDate);
-
-        if(daysBetween > 14){
-            priority.eventStatus = EventStatus.LOW;
-        }
-        else if (daysBetween <= 14 && daysBetween > 7){
-        	priority.eventStatus = EventStatus.MEDIUM;
-        }
-        else if (daysBetween <= 7 && daysBetween > 4){
-        	priority.eventStatus = EventStatus.HIGH;
-        }
-        else
-        	priority.eventStatus = EventStatus.CRITICAL;
-
-        return priority.eventStatus;
     }
 
 }

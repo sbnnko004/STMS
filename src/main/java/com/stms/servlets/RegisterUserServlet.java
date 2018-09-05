@@ -1,21 +1,29 @@
 package com.stms.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.stms.dao.ApplicationDao;
 import com.stms.util.EmailSender;
 import com.stms.util.User;
-import com.stms.dao.ApplicationDao;
 
 //@WebServlet("/register")
 public class RegisterUserServlet extends HttpServlet {
 	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/html/register.jsp");
+		dispatcher.include(req, resp);
+	
+	}
+	
+		
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -81,14 +89,6 @@ public class RegisterUserServlet extends HttpServlet {
 			}
 		}
 				
-	}
-	
-		
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/html/register.jsp");
-		dispatcher.include(req, resp);
-	
 	}
 
 	

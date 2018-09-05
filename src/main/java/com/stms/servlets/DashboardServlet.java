@@ -1,10 +1,10 @@
 package com.stms.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,8 +22,10 @@ public class DashboardServlet extends HttpServlet {
 			if(session.getAttribute("username")!=null) {
 				ApplicationDao dao = new ApplicationDao();
 			
-				List<Event> events = dao.getEvents(session.getAttribute("username").toString());
+				ArrayList<Event> events = dao.getEvents(session.getAttribute("username").toString());
+				ArrayList<String> courses = dao.getCourses();
 				req.setAttribute("events", events);
+				req.setAttribute("courses", courses);
 				req.getRequestDispatcher("/html/dashboard.jsp").forward(req, resp);
 			}
 			else {
