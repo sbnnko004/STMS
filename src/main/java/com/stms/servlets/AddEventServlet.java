@@ -89,7 +89,7 @@ public class AddEventServlet extends HttpServlet {
 		else{
 			infoMessage="Event added.";
 		}
-		resp.sendRedirect("/dashboard");					
+		resp.sendRedirect("/updateToDoList");					
 
 	}
 

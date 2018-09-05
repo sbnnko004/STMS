@@ -59,6 +59,14 @@
 		<servlet-name>AddEventServlet</servlet-name>
 		<url-pattern>/addevent</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>UpdateToDoListServlet</servlet-name>
+		<servlet-class>com.stms.servlets.UpdateToDoListServlet</servlet-class>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>UpdateToDoListServlet</servlet-name>
+		<url-pattern>/updateToDoList</url-pattern>
+	</servlet-mapping>
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>

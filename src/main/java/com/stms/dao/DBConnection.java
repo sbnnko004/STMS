@@ -16,7 +16,8 @@ public class DBConnection {
 	protected static final String table_tests = "tests";
 	protected static final String table_projects = "projects";
 	protected static final String table_assignments = "assignments";
-	//protected static final String table_toDoList = "toDoList";
+	protected static final String table_toDoList = "toDoList";
+	protected static final String table_toDoListEntry = "toDoListEntry";
 	
 	public static Connection getConnectionToDatabase() {
 		Connection connection = null;
@@ -124,6 +125,33 @@ public class DBConnection {
 						"  `courseID` int(11) NOT NULL," + 
 						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)," +
 						"  FOREIGN KEY (`courseID`) REFERENCES `"+table_courses+"`(`courseID`)"+
+						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+				
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
+				
+				System.out.println("Creates the toDoListEntry table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_toDoListEntry+"` (" + 
+						"  `entryID` int(11) NOT NULL AUTO_INCREMENT," +
+						"  `userID` int(11) NOT NULL,"+
+						"  `entryDate`  DATE NOT NULL," + // this will be curdate() on entry
+						"  `date` Date NOT NULL,"+
+						"  FOREIGN KEY (`userID`) REFERENCES `"+table_users+"`(`userID`)," +
+						"  PRIMARY KEY (`entryID`)" +
+						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+				statement = connection.prepareStatement(createQuery);
+				statement.executeUpdate();
+				
+				System.out.println("Creates the toDoList table, if it doesn't exists.");
+				createQuery = "CREATE TABLE IF NOT EXISTS `"+table_toDoList+"` (" + 
+						"  `taskID` int(11) NOT NULL AUTO_INCREMENT," + 
+						"  `eventID` int(11) NOT NULL," +
+						"  `entryID` int(11) NOT NULL," +
+						"  `taskName` varchar(50) NOT NULL," +
+						"  `taskDuration` int(11) NOT NULL," +
+						"  FOREIGN KEY (`eventID`) REFERENCES `"+table_events+"`(`eventID`)," +
+						"  FOREIGN KEY (`entryID`) REFERENCES `"+table_toDoListEntry+"`(`entryID`),"+
+						"  PRIMARY KEY (`taskID`)" +
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 				
 				statement = connection.prepareStatement(createQuery);

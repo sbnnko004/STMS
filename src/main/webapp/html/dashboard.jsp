@@ -101,13 +101,7 @@
 
         });
         $(document).ready(function() {
-            /*$("#me").click(function(){
-            $("#us").show();
-	        });
-	        $("#u").click(function(){
-	            $("#us").hide();
-	        });*/
-	        function hideEverything() {
+            function hideEverything() {
 	         	$("#courseCode").hide();
 	        	$("#hoursNeeded").hide();
 	        	$("#duration").hide();

@@ -23,7 +23,7 @@ public class Priority {
     	Priority priority = new Priority();
         String eventEndDate = event.getEndDate();
 
-        long daysBetween = priority.getTotalDaysBetween(eventEndDate);
+        long daysBetween = getTotalDaysBetween(eventEndDate);
 
         if(daysBetween > 14){
             priority.eventStatus = EventStatus.LOW;
@@ -55,19 +55,19 @@ public class Priority {
      * @param deadline
      * @return long
      */
-    private long getTotalDaysBetween(String deadline){
+    public static long getTotalDaysBetween(String deadline){
 
         // Converts string to LocalDate
         LocalDate localDate = LocalDate.parse(deadline);
-
+        Priority priority = new Priority();
         // Gets todays date.
-        LocalDate todayDate = LocalDate.of(getTodayDate().getYear(), getTodayDate().getMonth(), getTodayDate().getDayOfMonth());
+        LocalDate todayDate = LocalDate.of(priority.getTodayDate().getYear(),priority.getTodayDate().getMonth(), priority.getTodayDate().getDayOfMonth());
 
         // Gets deadline date
         LocalDate endDate = LocalDate.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth());
 
 
-        return ChronoUnit.DAYS.between(todayDate, endDate);
+        return ChronoUnit.DAYS.between(todayDate, endDate)-1;
     }
 
 }

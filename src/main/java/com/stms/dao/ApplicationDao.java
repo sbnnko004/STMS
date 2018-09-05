@@ -8,9 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import com.stms.util.Assignment;
 import com.stms.util.Event;
 import com.stms.util.Project;
+import com.stms.util.Task;
 import com.stms.util.Test;
 import com.stms.util.User;
 
@@ -248,6 +251,112 @@ public class ApplicationDao {
 
 		
 		return exists;
+	}
+	
+	public int saveTasks(ArrayList<Task> tasks, String username, String date) {
+		int affectedRows=0;
+		try {
+			// get the connection for the database
+			Connection connection = DBConnection.getConnectionToDatabase();
+			int userID = -1;
+			{ 	// get userID
+				String sql = "SELECT userID FROM "+DBConnection.table_users+" where username = '"+username+"'";
+				Statement mystatement = connection.prepareStatement(sql);
+				ResultSet set = mystatement.executeQuery(sql);
+				while(set.next()) {
+					userID = set.getInt("userID");
+				}
+			}
+			{	// delete previous entries
+				
+				String sql = "SELECT entryID FROM "+DBConnection.table_toDoListEntry+" where userID = '"+userID+"'";
+				Statement mystatement = connection.prepareStatement(sql);
+				ResultSet set = mystatement.executeQuery(sql);
+				while(set.next()) {
+					int entryID = set.getInt("entryID");
+					{	// write from todolist
+						String deleteQuery = "DELETE FROM "+DBConnection.table_toDoList+" WHERE entryID='"+entryID+"'";
+	
+						// set parameters with PreparedStatement
+						Statement statement = connection.createStatement();
+	
+						// execute the statement
+						affectedRows+=statement.executeUpdate(deleteQuery);
+					}
+					{   // delete from todolistentry
+						String deleteQuery = "DELETE FROM "+DBConnection.table_toDoListEntry+" WHERE entryID='"+entryID+"'";
+						// set parameters with PreparedStatement
+						Statement statement = connection.createStatement();
+	
+						// execute the statement
+						affectedRows+=statement.executeUpdate(deleteQuery);
+					}
+				}
+			}
+			{	// addNew entries
+				int entryID = -1;
+				{
+					String insertQuery = "INSERT INTO `"+DBConnection.table_toDoListEntry+"` (`userID`, `entryDate`, `date`) VALUES (?, ?, ?);";
+
+					// set parameters with PreparedStatement
+					java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+					statement.setInt(1, userID);
+					statement.setString(2, LocalDate.now().toString());
+					statement.setString(3, date);
+						
+					// execute the statement
+					affectedRows+= statement.executeUpdate();
+					
+				}
+				{
+					String sql = "SELECT entryID FROM "+DBConnection.table_toDoListEntry+" where userID = '"+userID+"'";
+					Statement mystatement = connection.prepareStatement(sql);
+					ResultSet set = mystatement.executeQuery(sql);
+					while(set.next()) {
+						entryID = set.getInt("entryID");
+					}
+					
+				}
+				System.out.println("saving tasks");
+				for(Task each: tasks) {
+					String insertQuery = "INSERT INTO `"+DBConnection.table_toDoList+"` (`eventID`, `entryID`,`taskName`,`taskDuration`) VALUES (?, ?, ?, ?);";
+
+					// set parameters with PreparedStatement
+					java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+					statement.setInt(1, each.getTaskID());
+					statement.setInt(2, entryID);
+					statement.setString(3, each.getTaskName());
+					statement.setInt(4, each.getTaskDuration());
+					
+						
+					// execute the statement
+					affectedRows+= statement.executeUpdate();
+
+				}
+			}
+			/*
+			// write the insert query
+			String insertQuery = "INSERT INTO `users` (`userID`, `username`, `firstname`, `lastname`, `emailaddress`, `password`) VALUES (NULL, ?, ?, ?, ?, aes_encrypt(?,?));";
+
+			// set parameters with PreparedStatement
+			java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
+			statement.setString(1, user.getUserName());
+			statement.setString(2, user.getFirstName());
+			statement.setString(3, user.getLastName());
+			statement.setString(4, user.getEmailAddress());
+			statement.setString(5, user.getPassWord());
+			statement.setString(6, "aikebiev");
+			
+
+			// execute the statement
+			rowsAffected = statement.executeUpdate();
+			 */
+		}
+		catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		
+		return affectedRows;
 	}
 	
 	/**
