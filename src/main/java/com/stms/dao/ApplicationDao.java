@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import com.stms.util.Assignment;
 import com.stms.util.Event;
@@ -51,9 +51,9 @@ public class ApplicationDao {
 	/**
 	 * this method adds an event into the database, returning the number of rows affected 
 	 * 
-	 * @param event
-	 * @param username
-	 * @return int rows
+	 * @param event event to be added into database
+	 * @param username of the user adding to the database
+	 * @return int rows affected in database
 	 */
 	public int addEvent(Event event, String username) {
 		int rowsAffected = 0;
@@ -253,6 +253,14 @@ public class ApplicationDao {
 		return exists;
 	}
 	
+	/**
+	 * this method saves tasks generated in the scheduler class to the database
+	 * 
+	 * @param tasks
+	 * @param username
+	 * @param date
+	 * @return
+	 */
 	public int saveTasks(ArrayList<Task> tasks, String username, String date) {
 		int affectedRows=0;
 		try {
@@ -334,23 +342,7 @@ public class ApplicationDao {
 
 				}
 			}
-			/*
-			// write the insert query
-			String insertQuery = "INSERT INTO `users` (`userID`, `username`, `firstname`, `lastname`, `emailaddress`, `password`) VALUES (NULL, ?, ?, ?, ?, aes_encrypt(?,?));";
 
-			// set parameters with PreparedStatement
-			java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
-			statement.setString(1, user.getUserName());
-			statement.setString(2, user.getFirstName());
-			statement.setString(3, user.getLastName());
-			statement.setString(4, user.getEmailAddress());
-			statement.setString(5, user.getPassWord());
-			statement.setString(6, "aikebiev");
-			
-
-			// execute the statement
-			rowsAffected = statement.executeUpdate();
-			 */
 		}
 		catch (SQLException exception) {
 			exception.printStackTrace();
@@ -478,7 +470,62 @@ public class ApplicationDao {
 		}
 		return events;
 	}
+	
+	/**
+	 * this method get's all tasks belonging to a specific user
+	 * 
+	 * @param username
+	 * @return ArrayList events
+	 */
+	public ArrayList<Task> getTasks(String username) {
+		ArrayList<Task> tasks = new ArrayList<>();
+		try {
+			int userID=0;
+			// get the connection for the database
+			Connection connection = DBConnection.getConnectionToDatabase();
+			{
+				String IDsql = "SELECT userID FROM users where username = '"+username+"'";
+				Statement mystatement = connection.prepareStatement(IDsql);
+				ResultSet myset = mystatement.executeQuery(IDsql);
+				if(myset.next()) {
+					userID = myset.getInt("userID");
+				}
+			}
+			String sql = "SELECT entryID, date FROM "+DBConnection.table_toDoListEntry+" WHERE userID='"+ userID +"'";
 
+			Statement statement = connection.createStatement();
+
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				int entryid = set.getInt("entryID");
+				String sql2 = "SELECT * FROM "+DBConnection.table_toDoList+" WHERE entryID='"+ entryid +"'";
+				Statement statement2 = connection.createStatement();
+				ResultSet set2 = statement2.executeQuery(sql2);
+				
+				
+				while (set2.next()) {
+					Task task = null;
+					int taskID = set2.getInt("eventID"); // which event the task belongs to
+					String taskName = set2.getString("taskName");
+					int taskDuration = set2.getInt("taskDuration");
+					LocalDate date = LocalDate.parse(set.getString("date"));
+					
+					task = new Task(taskID,taskName, taskDuration, date);
+					tasks.add(task);
+				}
+			}
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		System.out.println(tasks.size());
+		return tasks;
+	}
+	/**
+	 * retrieves user details from the database
+	 * 
+	 * @param username
+	 * @return
+	 */
 	public User getProfileDetails(String username) {
 		User user = null;
 		try {
@@ -504,6 +551,13 @@ public class ApplicationDao {
 		}
 		return user;
 	}
+	
+	/**
+	 * registers new user into database
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public int registerUser(User user) {
 		int rowsAffected = 0;
 
@@ -533,6 +587,13 @@ public class ApplicationDao {
 		return rowsAffected;
 	}
 
+	/**
+	 * checks in username/email and password belong to a specific user in system
+	 * 
+	 * @param usernameOrEmail
+	 * @param password
+	 * @return
+	 */
 	public boolean validateUser(String usernameOrEmail, String password) {
 		boolean isValidUser = false;
 		try {

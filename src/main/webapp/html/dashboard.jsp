@@ -2,7 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="java.util.ArrayList"
 	import="com.stms.util.Event" import="com.stms.util.Test"
-	import="com.stms.util.Project" import="com.stms.util.Assignment"%>
+	import="com.stms.util.Project" import="com.stms.util.Assignment"
+	import="com.stms.util.Task"%>
 <html lang="en">
 <%
 	Object object = request.getAttribute("events");
@@ -15,6 +16,12 @@
 	ArrayList<String> courses=new ArrayList<>();
 	if(object instanceof ArrayList){
 		courses=(ArrayList<String>)object;
+	}
+	object = null;
+	object = request.getAttribute("tasks");
+	ArrayList<Task> tasks=new ArrayList<>();
+	if(object instanceof ArrayList){
+		tasks=(ArrayList<Task>)object;
 	}
 %>
 <head>
@@ -29,16 +36,11 @@
 	content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
 	name='viewport' />
 <meta name="viewport" content="width=device-width" />
-<link href="./css/bootstrap.min.css" rel="stylesheet" />
-
-<link href="./css/animate.min.css" rel="stylesheet" />
-
-<link
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
-	rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300'
 	rel='stylesheet' type='text/css'>
 <link href="./css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+
 <script src="./js/jquery/moment.min.js" type="text/javascript"></script>
 <script src="./js/jquery/jquery.js" type="text/javascript"></script>
 <script
@@ -53,7 +55,6 @@
 <script src="./js/light-bootstrap-dashboard.js?v=1.4.0"></script>
 <script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
 
-<link href="./css/custom.css" rel="stylesheet" />
 <script src="./js/custom.js"></script>
 <link href="./css/light-bootstrap-dashboard.css?v=1.4.0"
 	rel="stylesheet" />
@@ -70,8 +71,16 @@
 <link href='./css/fullcalendar.css' rel='stylesheet' />
 <link href='./css/fullcalendar.print.css' rel='stylesheet' media='print' />
 <script src='./js/fullcalendar.js'></script>
+<link href="./css/bootstrap.min.css" rel="stylesheet" />
+<link href="./css/animate.min.css" rel="stylesheet" />
 
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<link href="./css/custom.css" rel="stylesheet" />
 <script>
+
         jQuery(function($){ // wait until the DOM is ready
             $("#startdate").datepicker({
             	dateFormat: 'yy-mm-dd',
@@ -101,7 +110,7 @@
 
         });
         $(document).ready(function() {
-            function hideEverything() {
+        	function hideEverything() {
 	         	$("#courseCode").hide();
 	        	$("#hoursNeeded").hide();
 	        	$("#duration").hide();
@@ -200,7 +209,7 @@
 			<div class="sidebar-wrapper">
 				<div class="logo">
 					<a href="https://www.cs.uct.ac.za/~sbnnko004" class="simple-text">
-						<b>STMS</b> <br /> Hendricks, Jaren (leader); <br /> Edwards,
+						<b>STMS</b> <br /> Hendricks, Jaren; <br /> Edwards,
 						Gareth & <br /> Sibandze, Nkosingiphile
 					</a>
 				</div>
@@ -319,6 +328,7 @@
 										<div class="table-full-width">
 											<table class="table">
 												<tbody>
+													<% for(Task task: tasks){ %>
 													<tr>
 														<td>
 															<div class="checkbox">
@@ -326,7 +336,7 @@
 																	for="checkbox1"></label>
 															</div>
 														</td>
-														<td>Start working on event one.</td>
+														<td><%= String.valueOf(task.getTaskName()+"    "+task.getTaskDuration()) %></td>
 														<td class="td-actions text-right">
 															<button type="button" rel="tooltip" title="Edit Task"
 																class="btn btn-info btn-simple btn-xs">
@@ -338,6 +348,7 @@
 															</button>
 														</td>
 													</tr>
+													<% } %>
 												</tbody>
 												</tbody>
 											</table>
@@ -364,10 +375,11 @@
 															<div class="form-group">
 																<input type="text" name="eventname" id="eventname"
 																	tabindex="1" class="form-control"
-																	placeholder="Event name" value="">
+																	placeholder="Event name" pattern=".{3,}"   required title="3 characters minimum" value="">
 															</div>
 															<div class="form-group">
 																<input type="text" name="eventdescription"
+																pattern=".{0}|.{5,}"   required title="Either 0 OR (5 chars minimum)"
 																	id="eventdescription" tabindex="2" class="form-control"
 																	placeholder="Event Description" value="">
 															</div>
@@ -398,16 +410,15 @@
 																
 																<div id="hoursNeeded">
 																	<label>Time required in Hours and Minutes:
-																		format HH-MM <br />(This will be a drop down selector
-																		and will only show when Projects and Tests are shown)
+																		format HH-MM
 																	</label> <input type="text" name="timeneeded" id="timeneeded"
 																		tabindex="3" class="form-control"
-																		placeholder="Leave blank if other" value="10-00">
+																		placeholder="Leave blank if other" value="HH-MM">
 																</div>
 															</div>
 															<div id="startDate" class="form-group">
 																<input type="text" name="startdate" id="startdate"
-																	tabindex="3" class="form-control"
+																	required tabindex="3" class="form-control"
 																	placeholder="Start Date: YYYY-MM-DD" value="">
 															</div>
 															<div id="endDate" class="form-group">
@@ -417,7 +428,7 @@
 															</div>
 															<div id="startTime" class="form-group">
 																<input type="text" name="starttime" id="starttime"
-																	tabindex="5" class="form-control"
+																	required tabindex="5" class="form-control"
 																	placeholder="Start Time: HH:MM" value="">
 															</div>
 															<div id="endTime" class="form-group">

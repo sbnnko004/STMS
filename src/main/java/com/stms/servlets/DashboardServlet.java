@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.stms.dao.ApplicationDao;
 import com.stms.util.Event;
+import com.stms.util.Task;
 
 //@WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -23,9 +24,11 @@ public class DashboardServlet extends HttpServlet {
 				ApplicationDao dao = new ApplicationDao();
 			
 				ArrayList<Event> events = dao.getEvents(session.getAttribute("username").toString());
+				ArrayList<Task>  tasks = dao.getTasks(session.getAttribute("username").toString());
 				ArrayList<String> courses = dao.getCourses();
 				req.setAttribute("events", events);
 				req.setAttribute("courses", courses);
+				req.setAttribute("tasks", tasks);
 				req.getRequestDispatcher("/html/dashboard.jsp").forward(req, resp);
 			}
 			else {
