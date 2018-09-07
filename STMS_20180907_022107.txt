@@ -1,3 +1,0 @@
-ERROR - 02:21:08: java.net.MalformedURLException: unknown protocol: pathmap
-WARNING - 02:21:23: Convert STMS
-ERROR - 02:21:23: java.net.MalformedURLException: unknown protocol: pathmap

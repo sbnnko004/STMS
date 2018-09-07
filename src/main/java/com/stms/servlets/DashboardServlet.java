@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.stms.Scheduler.Scheduler;
 import com.stms.dao.ApplicationDao;
 import com.stms.util.Event;
 import com.stms.util.Task;
@@ -25,10 +26,16 @@ public class DashboardServlet extends HttpServlet {
 			
 				ArrayList<Event> events = dao.getEvents(session.getAttribute("username").toString());
 				ArrayList<Task>  tasks = dao.getTasks(session.getAttribute("username").toString());
+				ArrayList<Event> upcomingEvents = Scheduler.getUpcomingEvents(events);
+				ArrayList<Event> pastEvents = Scheduler.getPastEvents(events);
+				ArrayList<Event> currentEvents = Scheduler.getCurrentEvents(events);
 				ArrayList<String> courses = dao.getCourses();
 				req.setAttribute("events", events);
 				req.setAttribute("courses", courses);
 				req.setAttribute("tasks", tasks);
+				req.setAttribute("upcomingEvents", upcomingEvents);
+				req.setAttribute("pastEvents", pastEvents);
+				req.setAttribute("currentEvents", currentEvents);
 				req.getRequestDispatcher("/html/dashboard.jsp").forward(req, resp);
 			}
 			else {

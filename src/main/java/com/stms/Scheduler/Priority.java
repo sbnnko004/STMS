@@ -43,7 +43,7 @@ public class Priority {
         	int timeBetween = (int) priority.getTotalTimeBetween(event.getEndTime());
             
         	//status is updated to missed if the time reaches zero.
-            if(timeBetween == 0)
+            if(timeBetween > 0)
             	priority.eventStatus = EventStatus.CRITICAL;
             else
             	priority.eventStatus = EventStatus.PAST;
@@ -67,7 +67,7 @@ public class Priority {
      * @param deadlineTime
      * @return
      */
-    private long getTotalTimeBetween(String deadlineTime){
+    public static long getTotalTimeBetween(String deadlineTime){
     	LocalTime timeNow = LocalTime.now();
         // Converts string to LocalTime
         LocalTime localTime = LocalTime.parse(deadlineTime);
@@ -99,7 +99,7 @@ public class Priority {
         LocalDate endDate = LocalDate.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth());
 
 
-        return ChronoUnit.DAYS.between(todayDate, endDate)-1;
+        return ChronoUnit.DAYS.between(todayDate, endDate);
     }
 
 }

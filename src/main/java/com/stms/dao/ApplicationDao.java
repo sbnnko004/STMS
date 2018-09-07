@@ -61,7 +61,7 @@ public class ApplicationDao {
 			int userID=0;
 			// get the connection for the database
 			Connection connection = DBConnection.getConnectionToDatabase();
-			String sql = "SELECT userID FROM users where username = '"+username+"'";
+			String sql = "SELECT userID FROM users where username = '"+username.toLowerCase()+"'";
 			Statement mystatement = connection.prepareStatement(sql);
 			ResultSet set = mystatement.executeQuery(sql);
 			while(set.next()) {
@@ -216,9 +216,9 @@ public class ApplicationDao {
 	 */
 	public boolean checkIfUserExists(String username, String email) {
 		boolean exists=false;
+		username = username.toLowerCase();
 		
 		try {
-
 			// get the connection for the database
 			Connection connection = DBConnection.getConnectionToDatabase();
 
@@ -263,6 +263,7 @@ public class ApplicationDao {
 	 */
 	public int saveTasks(ArrayList<Task> tasks, String username, String date) {
 		int affectedRows=0;
+		username = username.toLowerCase();
 		try {
 			// get the connection for the database
 			Connection connection = DBConnection.getConnectionToDatabase();
@@ -359,6 +360,8 @@ public class ApplicationDao {
 	 */
 	public ArrayList<Event> getEvents(String username) {
 		ArrayList<Event> events = new ArrayList<>();
+		username = username.toLowerCase();
+		
 		try {
 			int userID=0;
 			// get the connection for the database
@@ -478,6 +481,8 @@ public class ApplicationDao {
 	 * @return ArrayList events
 	 */
 	public ArrayList<Task> getTasks(String username) {
+		username = username.toLowerCase();
+		
 		ArrayList<Task> tasks = new ArrayList<>();
 		try {
 			int userID=0;
@@ -527,6 +532,8 @@ public class ApplicationDao {
 	 * @return
 	 */
 	public User getProfileDetails(String username) {
+		username = username.toLowerCase();
+		
 		User user = null;
 		try {
 			// get connection to database
@@ -570,7 +577,7 @@ public class ApplicationDao {
 
 			// set parameters with PreparedStatement
 			java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
-			statement.setString(1, user.getUserName());
+			statement.setString(1, user.getUserName().toLowerCase());
 			statement.setString(2, user.getFirstName());
 			statement.setString(3, user.getLastName());
 			statement.setString(4, user.getEmailAddress());
@@ -595,6 +602,7 @@ public class ApplicationDao {
 	 * @return
 	 */
 	public boolean validateUser(String usernameOrEmail, String password) {
+		
 		boolean isValidUser = false;
 		try {
 

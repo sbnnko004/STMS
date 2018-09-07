@@ -93,8 +93,8 @@
 										<form id="login-form" action="register" method="post"
 											role="form" style="display: block;">
 											<div class="form-group">
-												<input type="text" name="username" id="username"
-													tabindex="1" class="form-control" placeholder="Username"
+												<input type="text" name="username" id="username" required
+													title="can only take alphanumeric, min length 6" tabindex="1" data-validation="alphanumeric" class="form-control" placeholder="Username" pattern=".{6,}"
 													<%
 													if(request.getAttribute("username") != null && !(String.valueOf(request.getAttribute("username")).equals(""))){
 													%>
@@ -105,7 +105,7 @@
 											</div>
 											<div class="form-group">
 												<input type="email" name="email" id="email" tabindex="1"
-													class="form-control" placeholder="Email Address"
+													class="form-control" placeholder="Email Address" required
 													<%
 													if(request.getAttribute("email") != null && !(String.valueOf(request.getAttribute("email")).equals(""))){
 													%>
@@ -115,8 +115,8 @@
 													%>>
 											</div>
 											<div class="form-group">
-												<input type="fext" name="firstname" id="firstname"
-													tabindex="1" class="form-control" placeholder="First name"
+												<input type="text" name="firstname" id="firstname"
+													title="can only take alpha, min length 2" tabindex="1" pattern="[a-zA-Z]{2,}" required class="form-control" placeholder="First name"
 													<%
 													if(request.getAttribute("firstname") != null && !(String.valueOf(request.getAttribute("firstname")).equals(""))){
 													%>
@@ -127,7 +127,7 @@
 											</div>
 											<div class="form-group">
 												<input type="text" name="lastname" id="lastname"
-													tabindex="1" class="form-control" placeholder="Last name"
+													title="can only take alpha, min length 2" tabindex="1" pattern="[a-zA-Z]{2,}" required class="form-control" placeholder="Last name"
 													<%
 													if(request.getAttribute("lastname") != null && !(String.valueOf(request.getAttribute("lastname")).equals(""))){
 													%>
@@ -137,11 +137,11 @@
 													%>>
 											</div>
 											<div class="form-group">
-												<input type="password" name="password" id="password"
-													tabindex="2" class="form-control" placeholder="Password">
+												<input type="password" data-validation="alphanumeric" required pattern=".{6,}" name="password" id="password"
+													title="can only take alphanumerical, min length 6" tabindex="2" class="form-control" placeholder="Password">
 											</div>
 											<div class="form-group">
-												<input type="password" name="confirmpassword"
+												<input type="password" data-validation="alphanumeric" required pattern=".{6,}" name="confirmpassword"
 													id="confirmpassword" tabindex="2" class="form-control"
 													placeholder="Confirm Password">
 											</div>
@@ -169,9 +169,9 @@
 				<div class="container">
 					<nav class="pull-left">
 						<ul>
-							<li><a href="#"> Planner </a></li>
-							<li><a href="#"> Project Outline </a></li>
-							<li><a href="#"> Group Members </a></li>
+							<li><a href="/"> Planner </a></li>
+                            <li><a href="https://www.cs.uct.ac.za/~sbnnko004/outline"> Project Outline </a></li>
+                            <li><a href="https://www.cs.uct.ac.za/~sbnnko004/members"> Group Members </a></li>
 						</ul>
 					</nav>
 				</div>
@@ -196,20 +196,9 @@
 
 
 <script src="./js/custom.js" />
-
-<script type="text/javascript">
-	$(document).ready(function() {
-
-        $.notify({
-            icon: 'pe-7s-light2',
-            message: "Enter your log in creditial to Student Time Management App."
-
-        }, {
-            type: 'info',
-            timer: 4000
-        });
-
-    });
-</script>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+  $.validate();
+  </script>
 </html>

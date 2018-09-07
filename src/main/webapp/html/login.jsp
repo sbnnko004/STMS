@@ -96,7 +96,7 @@
 										<form name="login-form1" id="login-form" action="login"
 											method="post" role="form" style="display: block;">
 											<div class="form-group">
-												<input type="text" name="username" id="username"
+												<input type="text" name="username" id="username" pattern=".{6,}" title="username must be atleast 6 characters long"
 													tabindex="1" class="form-control" placeholder="Username"
 													<%
 													if(request.getAttribute("username") != null && !(String.valueOf(request.getAttribute("username")).equals(""))){
@@ -107,8 +107,8 @@
 													%>>
 											</div>
 											<div class="form-group">
-												<input type="password" name="password" id="password"
-													tabindex="2" class="form-control" placeholder="Password">
+												<input type="password" name="password" id="password" required pattern=".{6,}"
+													tabindex="2" class="form-control" placeholder="Password" data-validation="alphanumeric">
 											</div>
 
 											<!-- error message if user is not on database -->
@@ -165,9 +165,9 @@
 				<div class="container">
 					<nav class="pull-left">
 						<ul>
-							<li><a href="#"> Planner </a></li>
-							<li><a href="#"> Project Outline </a></li>
-							<li><a href="#"> Group Members </a></li>
+							<li><a href="/"> Planner </a></li>
+                            <li><a href="https://www.cs.uct.ac.za/~sbnnko004/outline"> Project Outline </a></li>
+                            <li><a href="https://www.cs.uct.ac.za/~sbnnko004/members"> Group Members </a></li>
 						</ul>
 					</nav>
 				</div>
@@ -196,8 +196,11 @@
 <script src="./js/custom.js">
 </script>
 
-
-<script type="text/javascript">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+  $.validate();
+  </script>
+<!--script type="text/javascript">
     $(document).ready(function() {
 
 
@@ -211,7 +214,7 @@
         });
 
     });
-</script>
+</script-->
 
 </html>
 

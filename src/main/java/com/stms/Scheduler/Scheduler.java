@@ -9,14 +9,60 @@ import com.stms.util.Task;
 import com.stms.util.Test;
 
 public class Scheduler {
-	public static ArrayList<Task> getTasks(ArrayList<Event> events, ArrayList<Task> prevDay, int studyTime){
-		ArrayList<Event> upcomingEvents = new ArrayList<>();
-		
+	public static ArrayList<Event> getCurrentEvents(ArrayList<Event> events){
+		ArrayList<Event> currentEvents = new ArrayList<>();
 		for(Event event: events) {
-			if(Priority.getTotalDaysBetween(event.getEndDate())>0) {
+			if(Priority.getTotalDaysBetween(event.getEndDate())==0) {
+				
+					currentEvents.add(event);
+			}
+			
+		}
+		return currentEvents;
+	}
+	
+	public static ArrayList<Event> getUpcomingEvents(ArrayList<Event> events){
+		ArrayList<Event> upcomingEvents = new ArrayList<>();
+		for(Event event: events) {
+			if(Priority.getTotalDaysBetween(event.getEndDate())==0) {
+				
+				if(Priority.getTotalTimeBetween(event.getEndTime())>0) {
+					upcomingEvents.add(event);
+				}
+			}
+			else if(Priority.getTotalDaysBetween(event.getEndDate())>0) {
+				
 				upcomingEvents.add(event);
+				
 			}
 		}
+		return upcomingEvents;
+	}
+	public static ArrayList<Event> getPastEvents(ArrayList<Event> events){
+		ArrayList<Event> pastEvents = new ArrayList<>();
+		for(Event event: events) {
+			if(Priority.getTotalDaysBetween(event.getEndDate())==0) {
+				
+				if(Priority.getTotalTimeBetween(event.getEndTime())>0) {
+					continue;
+				}
+				
+			}
+			else if(Priority.getTotalDaysBetween(event.getEndDate())>0) {
+				
+				//pastEvents.add(event);
+				continue;
+			}
+			else {
+				pastEvents.add(event);
+			}
+		}
+		return pastEvents;
+	}
+	public static ArrayList<Task> getTasks(ArrayList<Event> events, ArrayList<Task> prevDay, int studyTime){
+		ArrayList<Event> upcomingEvents = Scheduler.getUpcomingEvents(events);
+		
+		
 		
 		ArrayList<Task> tasks = new ArrayList<>();
 		ArrayList<Event> critical = new ArrayList<>();
@@ -125,7 +171,7 @@ public class Scheduler {
 				int duration = 0;
 				if((((double)((Project)event).timeRemaining*0.66)/daysRemaining)<=45) { // finish task if it can be done within an hour
 					duration = 45;
-					if(((Test)event).timeRemaining<=45) {
+					if(((Project)event).timeRemaining<=45) {
 						duration=((Project)event).timeRemaining;
 					}
 				}
